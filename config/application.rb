@@ -66,7 +66,5 @@ module Droolitapi
     config.assets.version = '1.0'
     
     config.session_store :mongoid_store
-    
-    Mongoid.logger.level = Logger::DEBUG
   end
 end
