@@ -1,7 +1,13 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+puts "Generating API Messages"
+
+ApiMessage.create_or_update(:code => "200", :status => "Ok")
+ApiMessage.create_or_update(:code => "201", :status => "Created")
+ApiMessage.create_or_update(:code => "401", :status => "Unauthorized")
+ApiMessage.create_or_update(:code => "403", :status => "Forbidden")
+ApiMessage.create_or_update(:code => "404", :status => "Not found")
+ApiMessage.create_or_update(:code => "422", :status => "Unprocessable Entity")
+ApiMessage.create_or_update(:code => "400", :status => "Bad Request")
+ApiMessage.create_or_update(:code => "405", :status => "Method Not Allowed")
+ApiMessage.create_or_update(:code => "500", :status => "Internal Server Error")
+
+puts "Generated  API Messages"
