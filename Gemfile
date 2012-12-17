@@ -7,6 +7,8 @@ gem 'mongoid_session_store'
 gem 'jquery-rails'
 gem 'capistrano'
 gem 'devise'
+gem 'rabl'
+gem 'oj'
 
 gem 'debugger'
 
