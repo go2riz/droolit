@@ -46,4 +46,27 @@ class User
   ## Token authenticatable
   field :authentication_token, :type => String
   
+  attr_accessor :app_id
+  
+  has_and_belongs_to_many :apps
+  
+  before_save :set_default_apps
+  
+  def app_id= name
+    @app_id = name
+    app = App.where(name: name).first
+    self.apps << app if app
+  end
+  
+  def app_id
+    return @app_id if @app_id.present?
+    self.apps.first
+  end
+  
+  private
+  
+  def set_default_apps
+    self.apps = App.defaults if apps.empty?
+  end
+  
 end
