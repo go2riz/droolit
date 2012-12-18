@@ -17,6 +17,7 @@ class User
 
   validates_presence_of :email
  # validates_presence_of :encrypted_password
+  validate :check_app_id
   
   ## Recoverable
   field :reset_password_token,   :type => String
@@ -45,5 +46,32 @@ class User
 
   ## Token authenticatable
   field :authentication_token, :type => String
+  
+  attr_accessor :app_id
+  
+  has_and_belongs_to_many :apps
+  
+  before_save :set_default_apps
+  
+  def app_id= name
+    @app_id = name
+    app = App.where(name: name).first
+    self.apps << app if app
+  end
+  
+  def app_id
+    return @app_id if @app_id.present?
+    self.apps.first.try(:name)
+  end
+  
+  private
+  
+  def set_default_apps
+    self.apps = App.defaults if apps.empty?
+  end
+  
+  def check_app_id
+    errors.add(:app, "id is invalid.") if app_id.present? && App.where(name: app_id).empty?
+  end
   
 end

@@ -11,3 +11,9 @@ ApiMessage.create_or_update(:code => "405", :status => "Method Not Allowed")
 ApiMessage.create_or_update(:code => "500", :status => "Internal Server Error")
 
 puts "Generated  API Messages"
+
+puts "Generating Default apps"
+
+App.create_or_update(:name => "droolit", :is_default => true)
+
+puts "Generated Default apps"
