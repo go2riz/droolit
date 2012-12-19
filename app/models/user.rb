@@ -1,6 +1,7 @@
 class User
   include Mongoid::Document
   include ::Mongoid::Timestamps
+  include Mongoid::FullTextSearch
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
@@ -16,6 +17,7 @@ class User
   field :encrypted_password, :type => String, :default => ""
 
   validates_presence_of :email
+  validates_presence_of :droolit_alias
  # validates_presence_of :encrypted_password
   validate :check_app_id
   
@@ -53,6 +55,8 @@ class User
   
   before_save :set_default_apps
   
+  fulltext_search_in :droolit_alias, :email
+
   def app_id= name
     @app_id = name
     app = App.where(name: name).first

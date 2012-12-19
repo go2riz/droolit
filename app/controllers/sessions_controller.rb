@@ -1,4 +1,7 @@
 class SessionsController < Devise::SessionsController
+  
+  skip_before_filter :check_auth_token
+  skip_before_filter :require_no_authentication
 
   def create
     resource = warden.authenticate!(:scope => resource_name, :recall => "sessions#login_failure")
@@ -27,8 +30,11 @@ class SessionsController < Devise::SessionsController
   end
   
   def login_failure
-    build_resource
-    @user = resource
+    @user = User.where(email: params[:user][:email]).first
+    
+    unless @user
+      @user = build_resource
+    end
 
     set_api_response("400", "Invalid email/password.")
     render :template => '/devise/sessions/login_failure'

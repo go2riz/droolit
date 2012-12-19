@@ -1,4 +1,6 @@
 class ConfirmationsController < Devise::ConfirmationsController
+  
+  skip_before_filter :check_auth_token
 
   def new
     super
