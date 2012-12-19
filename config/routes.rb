@@ -3,7 +3,7 @@ require 'resque/server'
 Droolitapi::Application.routes.draw do
   mount Resque::Server.new, :at => "/resque"
 
-  devise_for :users, :controllers => {:registrations => "registrations", :confirmations => "confirmations"}
+  devise_for :users, :controllers => {:registrations => "registrations", :confirmations => "confirmations", :passwords => "passwords"}
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
