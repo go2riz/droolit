@@ -6,7 +6,8 @@ Droolitapi::Application.routes.draw do
   devise_for :users, :controllers => {
     :registrations => "registrations",
     :confirmations => "confirmations",
-    :sessions => "sessions"
+    :sessions => "sessions",
+    :passwords => "passwords"
   }
 
   put 'users/change_password' => 'users#change_password', :as => 'user_change_password'
