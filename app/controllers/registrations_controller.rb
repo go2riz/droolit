@@ -28,7 +28,7 @@ class RegistrationsController < Devise::RegistrationsController
     respond_to do |format|
       format.json do
         @user = current_user
-
+        params[:user].delete(:email)
         if @user.update_without_password(params[:user])
           set_api_response("200", "Profile has been updated successfully.")
         else
