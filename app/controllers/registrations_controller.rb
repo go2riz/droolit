@@ -42,6 +42,25 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def create_with_oauth
+    respond_with do |format|
+      format.json {
+        build_resource
+
+        if resource.save
+          set_integrated_service(resource, params[:integrated_service])
+          set_api_response("200", "User has been registered successfully.")
+          render :template => '/devise/registrations/signed_up'
+        else
+          set_api_response("422", "Failed to register user.")
+          render :template => '/devise/registrations/new'
+        end
+      }
+
+      format.any{super}
+    end
+  end
+
   protected
   
   # Authenticates the current scope and gets the current resource from the session.

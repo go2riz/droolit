@@ -8,7 +8,10 @@ Droolitapi::Application.routes.draw do
     :confirmations => "confirmations",
     :sessions => "sessions",
     :passwords => "passwords"
-  }
+  },
+  :class_name => 'User' do
+    post "user_with_oauth", :to => "registrations#create_with_oauth"
+  end
 
   put 'users/change_password' => 'users#change_password', :as => 'user_change_password'
   get 'users' => 'users#index'

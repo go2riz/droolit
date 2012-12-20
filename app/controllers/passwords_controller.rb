@@ -35,18 +35,4 @@ class PasswordsController < Devise::ConfirmationsController
 
   end
 
-  protected
-
-  def after_sending_reset_password_instructions_path_for(resource_name)
-    super
-  end
-
-  def assert_reset_token_passed
-    super
-  end
-
-  def unlockable?(resource)
-    super
-  end
-
 end
