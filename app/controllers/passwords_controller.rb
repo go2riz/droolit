@@ -23,11 +23,10 @@ class PasswordsController < Devise::ConfirmationsController
 
         if resource.errors.empty?
           set_api_response("200", "Password has been reset successfully.")
-          render :template => '/devise/passwords/changed'
         else
           set_api_response("422", "Failed to reset password.")
-          render :template => '/devise/passwords/new'
         end
+        render :template => '/devise/passwords/status'
       }
 
       format.any{super}
