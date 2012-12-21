@@ -19,10 +19,10 @@ class User
 
   validates_presence_of :email
   
-  validates :droolit_alias, :presence => true, :uniqueness => true, :format => {:with => /^[A-Za-z\d_]+$/, :message => "can only be alphanumeric with no spaces"}
+  validates :droolit_alias, :presence => true, :uniqueness => true, :format => {:with => /^[A-Za-z\d_]+$/, :message => "can only be alphanumeric with no spaces", :allow_blank => true}
   
  # validates_presence_of :encrypted_password
-  validate :check_app_id
+  validate :check_app_id, :check_current_password
   
   ## Recoverable
   field :reset_password_token,   :type => String
@@ -57,7 +57,7 @@ class User
   
   field :is_admin, :tyle => Boolean, :default => false
   
-  attr_accessor :app_id
+  attr_accessor :app_id, :current_password, :skip_current_password
   
   has_and_belongs_to_many :apps
   has_many :integrated_services
@@ -106,6 +106,11 @@ class User
   
   def check_app_id
     errors.add(:app, "id is invalid.") if app_id.present? && App.where(name: app_id).empty?
+  end
+  
+  def check_current_password
+    return if skip_current_password.nil? || skip_current_password == true
+    errors.add(:current_password, "is invalid.") unless valid_password?(current_password)
   end
   
 end

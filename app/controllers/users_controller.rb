@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json{
-        if @user.update_attributes(params[:user])
+        if @user.update_attributes(params[:user].update(:skip_current_password => false))
           set_api_response("200", "Password has been updated successfully.")
         else
           set_api_response("422", "Failed to change password.")
