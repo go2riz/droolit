@@ -55,6 +55,8 @@ class User
   field :activation_token, :type => String
   field :deleted_at, :type => Time
   
+  field :is_admin, :tyle => Boolean, :default => false
+  
   attr_accessor :app_id
   
   has_and_belongs_to_many :apps

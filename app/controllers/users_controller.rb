@@ -36,5 +36,13 @@ class UsersController < ApplicationController
     end
 
   end
+  
+  def is_admin
+    respond_to do |format|
+      format.json{
+        set_api_response("200", "User #{@user.is_admin ? "have": "does not have"} admin privileges.")
+      }
+    end
+  end
 
 end
