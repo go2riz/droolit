@@ -12,6 +12,7 @@ Droolitapi::Application.routes.draw do
   :class_name => 'User' do
     post "user_with_oauth", :to => "registrations#create_with_oauth"
     get "users/activate", :to => "registrations#activate"
+    #post "reset_password_token", :to => "passwords#send_reset_password_token"
   end
 
   put 'users/change_password' => 'users#change_password', :as => 'user_change_password'

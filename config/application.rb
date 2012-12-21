@@ -67,5 +67,11 @@ module Droolitapi
     config.assets.version = '1.0'
     
     config.session_store :mongoid_store
+
+    config.generators do |g|
+      g.orm :mongoid
+      g.test_framework :rspec, :fixture => false
+      g.fixture_replacement :factory_girl
+    end
   end
 end

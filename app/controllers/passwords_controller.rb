@@ -9,7 +9,20 @@ class PasswordsController < Devise::ConfirmationsController
   end
 
   def create
-    super
+    respond_with do |format|
+      format.json {
+        self.resource = resource_class.send_reset_password_instructions(resource_params)
+
+        if successfully_sent?(resource)
+          set_api_response("200", "Instructions to reset password has been sent to your email address.")
+        else
+          set_api_response("422", "Failed to send reset password instructions.")
+        end
+        render :template => '/devise/passwords/status'
+      }
+
+      format.any{super}
+    end
   end
 
   def edit
