@@ -6,9 +6,9 @@ class IntegratedService
   field :provider_user_id
   field :auth_token
 
-  embedded_in :user
+  belongs_to :user
 
-  def set_integrated_service user, param_hash
+  def self.set_integrated_service user, param_hash
     user.integrated_services.create(param_hash)
   end
 

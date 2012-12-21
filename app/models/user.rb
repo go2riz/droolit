@@ -52,7 +52,7 @@ class User
   attr_accessor :app_id
   
   has_and_belongs_to_many :apps
-  embeds_many :integrated_services
+  has_many :integrated_services
   
   before_save :set_default_apps
   

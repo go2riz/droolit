@@ -48,7 +48,7 @@ class RegistrationsController < Devise::RegistrationsController
         build_resource
 
         if resource.save
-          set_integrated_service(resource, params[:integrated_service])
+          IntegratedService.set_integrated_service(resource, params[:integrated_service])
           set_api_response("200", "User has been registered successfully.")
           render :template => '/devise/registrations/signed_up'
         else
