@@ -2,6 +2,8 @@ class SessionsController < Devise::SessionsController
   
   skip_before_filter :check_auth_token
   skip_before_filter :require_no_authentication
+  
+  before_filter :check_activation, :only => [:create]
 
   def create
     resource = warden.authenticate!(:scope => resource_name, :recall => "sessions#login_failure")
@@ -38,6 +40,17 @@ class SessionsController < Devise::SessionsController
 
     set_api_response("400", "Invalid email/password.")
     render :template => '/devise/sessions/login_failure'
+  end
+  
+  protected
+  
+  def check_activation
+    @user = User.where(email: params[:user][:email]).first
+    
+    if @user.present? && @user.disabled?
+      set_api_response("400", "Your account has been disabled.")
+      render :template => '/devise/sessions/login_failure'
+    end
   end
 
 end

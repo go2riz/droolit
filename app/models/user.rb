@@ -11,13 +11,16 @@ class User
     :token_authenticatable, :confirmable, :async
        
   field :droolit_alias
+  field :name
 
   ## Database authenticatable
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
 
   validates_presence_of :email
-  validates_presence_of :droolit_alias
+  
+  validates :droolit_alias, :presence => true, :uniqueness => true, :format => {:with => /^[A-Za-z\d_]+$/, :message => "can only be alphanumeric with no spaces"}
+  
  # validates_presence_of :encrypted_password
   validate :check_app_id
   
@@ -49,6 +52,9 @@ class User
   ## Token authenticatable
   field :authentication_token, :type => String
   
+  field :activation_token, :type => String
+  field :deleted_at, :type => Time
+  
   attr_accessor :app_id
   
   has_and_belongs_to_many :apps
@@ -57,6 +63,14 @@ class User
   before_save :set_default_apps
   
   fulltext_search_in :droolit_alias, :email
+  
+  class << self
+    
+    def valid_activation_token?(token)
+      where(activation_token: token).present?
+    end
+    
+  end
 
   def app_id= name
     @app_id = name
@@ -68,7 +82,20 @@ class User
     return @app_id if @app_id.present?
     self.apps.first.try(:name)
   end
+
+  def soft_delete
+    return false if deleted_at.present?
+    update_attributes(:deleted_at => Time.current, :activation_token => Devise.friendly_token)
+  end
   
+  def disabled?
+    deleted_at.present?
+  end
+  
+  def activate!
+    update_attributes(:deleted_at => nil, :activation_token => nil)
+  end
+
   private
   
   def set_default_apps

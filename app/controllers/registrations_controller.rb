@@ -1,6 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   
-  skip_before_filter :check_auth_token, :only => [:new, :create]
+  skip_before_filter :check_auth_token, :only => [:new, :create, :activate]
 
   def new
     super
@@ -42,6 +42,40 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def destroy
+    respond_to do |format|
+      format.json do
+        if resource.soft_delete
+          Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+          Devise.mailer.send(:cancelled_confirmation, resource).deliver
+          set_api_response("200", "Your account has been cancelled successfully.")
+          render :template => '/devise/registrations/cancelled'
+        else
+          set_api_response("422", "Failed to cancel your account.")
+          render :template => '/devise/registrations/cancellation_failed'
+        end
+      end
+    end
+  end
+  
+  def activate
+    build_activation_resource
+
+    respond_to do |format|
+      format.json do
+        if resource.new_record? || !resource.disabled?
+          set_api_response("422", "Failed to activate user.")
+          render :template => '/devise/registrations/activation_failed'
+        else
+          resource.activate!
+          Devise.mailer.send(:activation_confirmation, resource).deliver
+          set_api_response("200", "User has been activated successfully. You can now sign in to your account.")
+          render :template => '/devise/registrations/activated'
+        end
+      end
+    end
+  end
+
   def create_with_oauth
     respond_with do |format|
       format.json {
@@ -67,6 +101,13 @@ class RegistrationsController < Devise::RegistrationsController
   def authenticate_scope!
     send(:"authenticate_#{resource_name}!")
     self.resource = send(:"current_#{resource_name}")
+  end
+  
+  # Build a devise resource using activation token
+  def build_activation_resource(hash=nil)
+    hash ||= resource_params || {}
+    self.resource = resource_class.where(activation_token: params[:token]).first
+    self.resource = resource_class.new if self.resource.nil?
   end
 
 end

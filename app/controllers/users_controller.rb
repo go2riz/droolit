@@ -27,7 +27,6 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json{
         if @user.update_attributes(params[:user])
-          @user.reset_authentication_token!
           set_api_response("200", "Password has been updated successfully.")
         else
           set_api_response("422", "Failed to change password.")
