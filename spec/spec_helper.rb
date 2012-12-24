@@ -4,6 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rspec'
+require 'factory_girl'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -36,20 +37,24 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
-
+  
   config.extend ControllerMacros, :type => :controller
   config.include JsonSpec::Helpers
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
+  config.before :each do
+    Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
   end
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+  #DatabaseCleaner.strategy = :truncation
+  #DatabaseCleaner.orm = "mongoid"
+  #
+  #config.before(:each) do
+  #  DatabaseCleaner.clean_with(:truncation)
+  #  DatabaseCleaner.start
+  #end
+  #
+  #config.after(:each) do
+  #  DatabaseCleaner.clean
+  #end
 
 end
