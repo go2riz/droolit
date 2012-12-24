@@ -1,4 +1,4 @@
-class PasswordsController < Devise::ConfirmationsController
+class PasswordsController < Devise::PasswordsController
 
   prepend_before_filter :require_no_authentication
   # Render the #edit only if coming from a reset password email link

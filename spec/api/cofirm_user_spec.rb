@@ -15,11 +15,12 @@ describe "confirm user" do
             :user => {
                 :id => @user.id,
                 :droolit_alias => @user.droolit_alias,
-                :email => @user.email
+                :email => @user.email,
+                :errors => []
             }
         }
     }.to_json
-    get "/users/confirmation.json?confirmation_token=test"
+    get "/users/confirmation.json?confirmation_token=#{@user.confirmation_token}"
     response.should be_success
     response.body.should == @expected
   end
