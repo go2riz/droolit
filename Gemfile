@@ -31,6 +31,7 @@ group :test do
   gem 'mongoid-rspec'
   gem 'email_spec'
   gem 'launchy'
+  gem 'json_spec'
 end
 
 # To use ActiveModel has_secure_password
