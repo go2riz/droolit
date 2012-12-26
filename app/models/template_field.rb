@@ -1,5 +1,8 @@
 class TemplateField
-  
+
+  include Mongoid::Document
+  include ::Mongoid::Timestamps
+
   field :label
   field :required
   field :display_message
