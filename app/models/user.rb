@@ -61,7 +61,8 @@ class User
   
   has_and_belongs_to_many :apps
   has_many :integrated_services
-  
+  has_many :drools, :inverse_of => :owner
+
   before_save :set_default_apps
   
   fulltext_search_in :droolit_alias, :email
