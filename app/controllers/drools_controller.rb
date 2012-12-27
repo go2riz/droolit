@@ -1,7 +1,7 @@
 class DroolsController < ApplicationController
   prepend_before_filter :check_auth_token
   before_filter :set_template, :only => [:create]
-  before_filter :get_drool, :only => [:update, :destroy]
+  before_filter :set_drool, :only => [:update, :destroy]
 
   respond_to :json
 
@@ -56,14 +56,19 @@ class DroolsController < ApplicationController
     end
   end
 
-  def get_drool
+  def set_template_field
+    @template_fields = @template.template_fields
+    user_template_fields = params[:drool][:template_fields]
+  end
+
+  def set_drool
     @drool = Drool.find(params[:id]) rescue nil
 
     if @drool.nil?
       @object = Drool.new
       set_api_response("404", "Failed to find the drool.")
       return(render :template => "/shared/not_found")
-    elsif !current_user.is_admin && @drool.owner != current_user
+    elsif @drool.owner != current_user
       @object = @drool
       set_api_response("401", "Failed to authorize the drool.")
       return(render :template => "/shared/not_authorized")
