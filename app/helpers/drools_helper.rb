@@ -1,0 +1,2 @@
+module DroolHelper
+end
