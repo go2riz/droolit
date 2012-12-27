@@ -6,6 +6,8 @@ class Template
   field :description
   field :status
   
+  belongs_to :owner, :class_name => 'User', :inverse_of => :templates
+  
   has_many :template_fields
 
   validates :description, :presence => true

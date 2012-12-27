@@ -62,6 +62,8 @@ class User
   has_and_belongs_to_many :apps
   has_many :integrated_services
   has_many :drools, :inverse_of => :owner
+  has_many :templates, :inverse_of => :owner
+  has_many :template_fields, :inverse_of => :owner
 
   before_save :set_default_apps
   
