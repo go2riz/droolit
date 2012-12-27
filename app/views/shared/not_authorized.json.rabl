@@ -3,6 +3,6 @@ attributes :code, :status, :details
 
 child @object do
   node :errors do |model|
-    ["No #{@object.class.name.underscore.gsub("_", " ")} exists with this id."]
+    ["You are not authorized for this #{@object.class.name.underscore.gsub("_", " ")}."]
   end
 end
