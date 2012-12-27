@@ -19,7 +19,8 @@ Droolitapi::Application.routes.draw do
   get 'users' => 'users#index'
   get 'users/is_admin' => 'users#is_admin', :as => 'user_is_admin'
 
-  resource :templates
+  resource :templates, :only => [:create, :update, :show, :destroy]
+  resource :template_fields, :only => [:create, :update, :destroy]
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
