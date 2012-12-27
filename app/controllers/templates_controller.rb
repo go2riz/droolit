@@ -7,6 +7,7 @@ class TemplatesController < ApplicationController
   
   def create
     @template = Template.new(params[:template])
+    @template.owner = current_user
 
     if @template.save
       set_api_response("200", "Template has been created successfully.")
@@ -52,8 +53,12 @@ class TemplatesController < ApplicationController
 
     if @template.nil?
       @object = Template.new
-      set_api_response("404", "Failed to find template.")
+      set_api_response("404", "Failed to find the template.")
       return(render :template => "/shared/not_found")
+    elsif !current_user.is_admin && @template.owner != current_user
+      @object = @template
+      set_api_response("401", "Failed to authorize the template.")
+      return(render :template => "/shared/not_authorized")
     end
   end
   
