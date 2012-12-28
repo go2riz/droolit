@@ -57,8 +57,27 @@ class DroolsController < ApplicationController
   end
 
   def set_template_field
-    @template_fields = @template.template_fields
-    user_template_fields = params[:drool][:template_fields]
+    drool_template_fields = params[:drool][:drool_template_fields]
+    if !drool_template_fields.empty?
+      drool_template_fields.each do |drool_template_field|
+        template_field = TemplateField.find(drool_template_field[:template_field_id])
+        if template_field.nil?
+          @object = TemplateField.new
+          set_api_response("404", "Failed to find the template field.")
+          return(render :template => "/shared/not_found")
+        end
+        dtf_obj = DroolTemplateField.new
+        dtf_obj.template_field_data = drool_template_field[:template_field_data]
+        dtf_obj.drool = @drool
+        dtf_obj.template_field = template_field
+        dtf_obj.save
+      end
+
+    else
+      set_api_response("422", "Please provide atleast one drool template field.")
+      return(render :template => "/drools/new")
+    end
+
   end
 
   def set_drool
