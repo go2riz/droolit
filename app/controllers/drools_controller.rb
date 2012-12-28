@@ -39,6 +39,17 @@ class DroolsController < ApplicationController
       render :template => "/drools/new"
     end
   end
+  
+  def search_by_title
+    @drools = Drool.full_text_search(:title => params[:title]).asc(:title)
+    set_api_response("200", @drools.present? ? "#{@drools.size} drools found." : "No drool found.")
+
+    respond_to do |format|
+      format.json{
+        render "search_results"
+      }
+    end
+  end
 
   protected
 
