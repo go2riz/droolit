@@ -1,6 +1,11 @@
 development:
   host: localhost
   database: droolitapi_development
+  sessions:
+    default:
+      database: droolitapi_development
+      hosts:
+        - localhost:27017
 
 test:
   host: localhost
@@ -18,3 +23,8 @@ production:
   #     port: 27018
   #   - host: slave2.local
   #     port: 27019
+#  sessions:
+#    default:
+#      database: <%= ENV['MONGOID_DATABASE'] %>
+#      hosts:
+#        - localhost:27017
