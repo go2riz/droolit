@@ -50,6 +50,28 @@ class DroolsController < ApplicationController
       }
     end
   end
+  
+  def search_by_location
+    @drools = Drool.full_text_search(:location => params[:location], :latitude => params[:geo_location], :longitude => params[:geo_location]).asc(:title)
+    set_api_response("200", @drools.present? ? "#{@drools.size} drools found." : "No drool found.")
+
+    respond_to do |format|
+      format.json{
+        render "search_results"
+      }
+    end
+  end
+  
+  def search_by_date
+    @drools = Drool.full_text_search(:created_at => params[:date], :updated_at => params[:date]).asc(:title)
+    set_api_response("200", @drools.present? ? "#{@drools.size} drools found." : "No drool found.")
+
+    respond_to do |format|
+      format.json{
+        render "search_results"
+      }
+    end
+  end
 
   protected
 

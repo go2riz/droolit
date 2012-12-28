@@ -11,8 +11,8 @@ class Drool
   field :latitude, :type => BigDecimal
   field :longitude, :type => BigDecimal
   field :status, :default => "active"
-  field :display_order
-  field :expires_on, default: ->{ 6.months.from_now }
+  field :display_order, :type => Integer
+  field :expires_on, :type => Time, default: ->{ 6.months.from_now }
   field :visibility, :default => "public"
   field :me2_group_code
   field :drool_type, :default => 'USER'
