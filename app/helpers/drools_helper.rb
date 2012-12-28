@@ -1,2 +1,2 @@
-module DroolHelper
+module DroolsHelper
 end

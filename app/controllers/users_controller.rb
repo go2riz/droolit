@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   respond_to :json
   
   def index
-    @users = User.fulltext_search("#{params[:droolit_alias]} #{params[:email]}")
+    @users = User.full_text_search("#{params[:droolit_alias]} #{params[:email]}")
     set_api_response("200", @users.present? ? "#{@users.size} users found." : "No user found.")
 
     respond_to do |format|

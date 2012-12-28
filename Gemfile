@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.9'
-gem 'mongoid'
+gem 'mongoid', '~> 3.0.0'
 gem 'bson_ext'
-gem 'mongoid_session_store'
-gem 'mongoid_fulltext'
+gem 'mongoid_session_store', :git => "git://github.com/nasirvq/mongoid_session_store.git"
+gem 'mongoid_search', :git => "git://github.com/mauriciozaffari/mongoid_search.git"
 gem 'jquery-rails'
 gem 'capistrano'
 gem 'devise'

@@ -1,7 +1,7 @@
 class DroolsController < ApplicationController
   prepend_before_filter :check_auth_token
   before_filter :set_template, :only => [:create]
-  before_filter :set_drool, :only => [:update, :destroy]
+  before_filter :set_drool, :only => [:update, :destroy, :change_status]
 
   respond_to :json
 
@@ -37,6 +37,51 @@ class DroolsController < ApplicationController
     else
       set_api_response("422", "Failed to delete drool.")
       render :template => "/drools/new"
+    end
+  end
+  
+  def search_by_title
+    @drools = Drool.full_text_search(:title => params[:title]).asc(:title)
+    set_api_response("200", @drools.present? ? "#{@drools.size} drools found." : "No drool found.")
+
+    respond_to do |format|
+      format.json{
+        render "search_results"
+      }
+    end
+  end
+  
+  def search_by_location
+    @drools = Drool.full_text_search(:location => params[:location], :latitude => params[:geo_location], :longitude => params[:geo_location]).asc(:title)
+    set_api_response("200", @drools.present? ? "#{@drools.size} drools found." : "No drool found.")
+
+    respond_to do |format|
+      format.json{
+        render "search_results"
+      }
+    end
+  end
+  
+  def search_by_date
+    @drools = Drool.full_text_search(:created_at => params[:date], :updated_at => params[:date]).asc(:title)
+    set_api_response("200", @drools.present? ? "#{@drools.size} drools found." : "No drool found.")
+
+    respond_to do |format|
+      format.json{
+        render "search_results"
+      }
+    end
+  end
+  
+  def change_status
+    @drool.status = params[:drool][:status]
+    
+    if @drool.save
+      set_api_response("200", "Drool status has been changed successfully.")
+      render :template => "/drools/status_changed"
+    else
+      set_api_response("422", "Failed to update drool status.")
+      render :template => "/drools/failed_change_status"
     end
   end
 

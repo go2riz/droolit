@@ -21,6 +21,16 @@ Droolitapi::Application.routes.draw do
 
   resource :templates, :only => [:create, :update, :show, :destroy]
   resource :template_fields, :only => [:create, :update, :destroy]
+  
+  resource :drools do
+    collection do
+      get "search_by_title"
+      get "search_by_location"
+      get "search_by_date"
+    end
+    
+    put "change_status"
+  end
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
