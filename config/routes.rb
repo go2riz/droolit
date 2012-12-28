@@ -28,6 +28,8 @@ Droolitapi::Application.routes.draw do
       get "search_by_location"
       get "search_by_date"
     end
+    
+    put "change_status"
   end
 
   # You can have the root of your site routed with "root"

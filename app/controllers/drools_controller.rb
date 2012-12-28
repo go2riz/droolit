@@ -1,7 +1,7 @@
 class DroolsController < ApplicationController
   prepend_before_filter :check_auth_token
   before_filter :set_template, :only => [:create]
-  before_filter :set_drool, :only => [:update, :destroy]
+  before_filter :set_drool, :only => [:update, :destroy, :change_status]
 
   respond_to :json
 
@@ -70,6 +70,18 @@ class DroolsController < ApplicationController
       format.json{
         render "search_results"
       }
+    end
+  end
+  
+  def change_status
+    @drool.status = params[:drool][:status]
+    
+    if @drool.save
+      set_api_response("200", "Drool status has been changed successfully.")
+      render :template => "/drools/status_changed"
+    else
+      set_api_response("422", "Failed to update drool status.")
+      render :template => "/drools/failed_change_status"
     end
   end
 
