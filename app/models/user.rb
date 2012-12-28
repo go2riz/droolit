@@ -1,7 +1,7 @@
 class User
   include Mongoid::Document
   include ::Mongoid::Timestamps
-  include Mongoid::FullTextSearch
+  include Mongoid::Search
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
@@ -55,7 +55,7 @@ class User
   field :activation_token, :type => String
   field :deleted_at, :type => Time
   
-  field :is_admin, :tyle => Boolean, :default => false
+  field :is_admin, :type => Boolean, :default => false
   
   attr_accessor :app_id
   
@@ -67,7 +67,7 @@ class User
 
   before_save :set_default_apps
   
-  fulltext_search_in :droolit_alias, :email
+  search_in :droolit_alias, :email
   
   class << self
     
