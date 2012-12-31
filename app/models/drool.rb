@@ -12,7 +12,7 @@ class Drool
   field :longitude, :type => BigDecimal
   field :status, :default => "active"
   field :display_order, :type => Integer
-  field :expires_on, :type => Time, default: ->{ 6.months.from_now }
+  field :expires_on, :type => Date, default: ->{ 6.months.from_now }
   field :visibility, :default => "public"
   field :me2_group_code
   field :drool_type, :default => 'USER'
@@ -31,8 +31,8 @@ class Drool
   validates :status, :presence => true, :inclusion => {
     :in => ["active", "expired", "reported", "deleted", "blocked", "withdrawn"], :allow_blank => true
   }
-
+  
   search_in :title, :location, :latitude, :longitude,
     :created_at, :updated_at, :address => [:city, :state, :postcode, :country_code]
-
-end
+  
+  end
