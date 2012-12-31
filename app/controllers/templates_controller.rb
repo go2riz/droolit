@@ -5,6 +5,12 @@ class TemplatesController < ApplicationController
   
   respond_to :json
   
+  def index
+    @templates = Template.where(:owner => current_user)
+    set_api_response("200", @templates.present? ? "#{@templates.size} templates found." : "No template found.")
+    render :template => "/templates/index"
+  end
+  
   def create
     @template = Template.new(params[:template])
     @template.owner = current_user
