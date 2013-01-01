@@ -2,6 +2,7 @@ class DroolsController < ApplicationController
   prepend_before_filter :check_auth_token
   before_filter :set_template, :only => [:create]
   before_filter :set_drool, :only => [:update, :destroy, :change_status]
+  before_filter :check_drool_template_field, :only => [:create]
 
   respond_to :json
 
@@ -88,7 +89,7 @@ class DroolsController < ApplicationController
   protected
 
   def set_template
-    @template = Template.find(params[:id]) rescue nil
+    @template = Template.find(params[:template_id]) rescue nil
 
     if @template.nil?
       @object = Template.new
@@ -101,28 +102,12 @@ class DroolsController < ApplicationController
     end
   end
 
-  def set_template_field
+  def check_drool_template_field
     drool_template_fields = params[:drool][:drool_template_fields]
-    if !drool_template_fields.empty?
-      drool_template_fields.each do |drool_template_field|
-        template_field = TemplateField.find(drool_template_field[:template_field_id])
-        if template_field.nil?
-          @object = TemplateField.new
-          set_api_response("404", "Failed to find the template field.")
-          return(render :template => "/shared/not_found")
-        end
-        dtf_obj = DroolTemplateField.new
-        dtf_obj.template_field_data = drool_template_field[:template_field_data]
-        dtf_obj.drool = @drool
-        dtf_obj.template_field = template_field
-        dtf_obj.save
-      end
-
-    else
+    if drool_template_fields.empty?
       set_api_response("422", "Please provide atleast one drool template field.")
       return(render :template => "/drools/new")
     end
-
   end
 
   def set_drool

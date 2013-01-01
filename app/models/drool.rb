@@ -31,7 +31,7 @@ class Drool
   validates :status, :presence => true, :inclusion => {
     :in => ["active", "expired", "reported", "deleted", "blocked", "withdrawn"], :allow_blank => true
   }
-  
+
   search_in :title, :location, :latitude, :longitude,
     :created_at, :updated_at, :address => [:city, :state, :postcode, :country_code]
   

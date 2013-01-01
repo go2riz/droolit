@@ -8,10 +8,13 @@ class DroolTemplateField
   belongs_to :drool
   belongs_to :template_field
 
+  validate :check_template_field
   validate :check_template_field_data
   validate :check_template_field_data_required
 
-  def check_template_field_data
+  accepts_nested_attributes_for :drool
+
+  def check_template_field_data_type
     return if template_field.datatype.blank? || template_field_data.blank?
     case template_field.datatype
       when "integer"
@@ -33,6 +36,10 @@ class DroolTemplateField
       when "yes"
         errors.add(:template_field_data, "cannot be empty.") if template_field_data.blank?
     end
+  end
+
+  def check_template_field
+    errors.add(:template_field, "cannot find template field.") if !template_field
   end
 
 end
