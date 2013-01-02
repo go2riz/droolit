@@ -9,10 +9,9 @@ class DroolTemplateField
   belongs_to :template_field
 
   validate :check_template_field
-  validate :check_template_field_data
+  validate :check_template_field_data_type
   validate :check_template_field_data_required
 
-  accepts_nested_attributes_for :drool
 
   def check_template_field_data_type
     return if template_field.datatype.blank? || template_field_data.blank?
@@ -40,6 +39,20 @@ class DroolTemplateField
 
   def check_template_field
     errors.add(:template_field, "cannot find template field.") if !template_field
+  end
+
+  def self.save_drool_template_fields drool, drool_template_fields
+    drool_template_fields.each do |drool_template_field|
+      drool_template_field_obj = drool.drool_template_fields.build(drool_template_field)
+      drool_template_field_obj.save
+    end
+  end
+
+  def self.update_drool_template_fields drool, drool_template_fields
+    drool_template_fields.each do |drool_template_field|
+      drool_template_field_obj = DroolTemplateField.find(drool_template_field[:id])
+      drool_template_field_obj.update_attributes(drool_template_field) if drool_template_field_obj
+    end
   end
 
 end
