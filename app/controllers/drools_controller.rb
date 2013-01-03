@@ -24,7 +24,7 @@ class DroolsController < ApplicationController
 
   def update
     if @drool.update_attributes(params[:drool])
-      DroolTemplateField.update_drool_template_fields(@drool, params[:drool_template_fields]) if !params[:drool_template_fields].empty?
+      DroolTemplateField.update_drool_template_fields(@drool, params[:drool_template_fields]) if !params[:drool_template_fields].blank?
       set_api_response("200", "Drool has been updated successfully.")
       render :template => "/drools/show"
     else
@@ -105,7 +105,7 @@ class DroolsController < ApplicationController
   end
 
   def check_drool_template_field
-    if params[:drool_template_fields].empty?
+    if params[:drool_template_fields].blank?
       set_api_response("422", "Please provide atleast one drool template field.")
       return(render :template => "/drools/new")
     end

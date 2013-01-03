@@ -24,7 +24,7 @@ class Drool
 
   has_one :address, as: :addressable
 
-  has_many :drool_template_fields
+  has_many :drool_template_fields, :dependent => :destroy
 
   validates :title, :presence => true, :length => {:maximum => 255, :allow_blank => true}
   validates :details, :length => {:maximum => 1000, :allow_blank => true}

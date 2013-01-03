@@ -21,14 +21,14 @@ Droolitapi::Application.routes.draw do
 
   resources :templates
   resources :template_fields, :only => [:create, :update, :destroy]
-  
+
   resources :drools do
     collection do
       get "search_by_title"
       get "search_by_location"
       get "search_by_date"
     end
-    
+
     put "change_status"
   end
 
