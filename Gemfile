@@ -11,7 +11,7 @@ gem 'devise'
 gem 'rabl'
 gem 'oj'
 
-gem 'debugger'
+#gem 'debugger'
 gem 'resque'
 gem 'devise-async'
 gem 'redis'
